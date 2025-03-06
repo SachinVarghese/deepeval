@@ -48,6 +48,7 @@ class BigBenchHard(DeepEvalBaseBenchmark):
         tasks: List[BigBenchHardTask] = None,
         n_shots: int = 3,
         enable_cot: bool = True,
+        enable_analogy: bool = True,
         n_problems_per_task: Optional[int] = None,
         verbose_mode: bool = False,
         confinement_instructions_dict: Optional[
@@ -66,6 +67,7 @@ class BigBenchHard(DeepEvalBaseBenchmark):
         self.scorer = Scorer()
         self.n_shots: int = n_shots
         self.enable_cot: bool = enable_cot
+        self.enable_analogy: bool = enable_analogy
         self.predictions: Optional[pd.DataFrame] = None
         self.task_scores: Optional[pd.DataFrame] = None
         self.overall_score: Optional[float] = None
@@ -194,6 +196,7 @@ class BigBenchHard(DeepEvalBaseBenchmark):
             task=task,
             n_shots=self.n_shots,
             enable_cot=self.enable_cot,
+            enable_analogy=self.enable_analogy,
         )
         pydantic_model = bbh_models_dict[task.value]
         try:
@@ -226,6 +229,7 @@ class BigBenchHard(DeepEvalBaseBenchmark):
                 task=task,
                 n_shots=self.n_shots,
                 enable_cot=self.enable_cot,
+                enable_analogy=self.enable_analogy,
             )
             prompts.append(prompt)
 
