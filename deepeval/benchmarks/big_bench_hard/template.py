@@ -12,7 +12,7 @@ class BigBenchHardTemplate:
 
     @staticmethod
     def generate_output(
-        input: str, task: BigBenchHardTask, n_shots: int, enable_cot: bool
+        input: str, task: BigBenchHardTask, n_shots: int, enable_cot: bool, enable_analogy: bool
     ):
         folder = "cot_prompts" if enable_cot else "shot_prompts"
         filename = BigBenchHardTemplate.get_filename(task)
@@ -21,11 +21,15 @@ class BigBenchHardTemplate:
         package_path = f"deepeval.benchmarks.big_bench_hard.{folder}"
 
         # get prompt from text file based on n_shots and folder path
-        prompt = "Task description: "
-        prompt_content = BigBenchHardTemplate.read_file(package_path, filename)
-        prompt += "\n\n".join(prompt_content[: n_shots + 1])
-        prompt += "\n\nQ: " + input + "\nA: "
-
+        prompt=""
+        if not enable_analogy:
+            prompt += "Task description: "
+            prompt_content = BigBenchHardTemplate.read_file(package_path, filename)
+            prompt += "\n\n".join(prompt_content[: n_shots + 1])
+            prompt += "\n\nQ: " + input + "\nA: "
+        else:
+            prompt += "**Problem**: " + input + "\n"
+            prompt += f"Recall {n_shots} relevant and distinct problems. For each problem, describe it and explain the answer. Answer the initial problem without explanation."
         return prompt
 
     def read_file(package_path, filename):

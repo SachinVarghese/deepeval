@@ -9,23 +9,28 @@ class GSM8KTemplate:
 
     @staticmethod
     def generate_output(
-        input: str, train_set: object, n_shots: int, enable_cot: bool
+        input: str, train_set: object, n_shots: int, enable_cot: bool, enable_analogy: bool
     ):
         prompt = ""
 
         # generate examples for n_shot inference
-        if n_shots > 0:
-            prompt = "The following are grade school math word problems\n\n"
-        for i in range(n_shots):
-            prompt += (
-                GSM8KTemplate.format_example(train_set[i], enable_cot) + "\n\n"
-            )
+        if not enable_analogy:
+            if n_shots > 0:
+                prompt = "The following are grade school math word problems\n\n"
+            for i in range(n_shots):
+                prompt += (
+                    GSM8KTemplate.format_example(train_set[i], enable_cot) + "\n\n"
+                )
 
         # problem of interest
-        prompt += "**Problem**: " + input + "\n**Answer**: \n\n"
+        prompt += "**Problem**: " + input + "\n"
+        if not enable_analogy:
+            prompt += "**Answer**: \n\n"
 
         if enable_cot:
             prompt += "Let's think step-by-step."
+        if enable_analogy:
+            prompt += f"Recall {n_shots} relevant and distinct problems. For each problem, describe it and explain the answer. Answer the initial problem without explanation."
         else:
             prompt += "No explanation needed."
 
