@@ -16,6 +16,7 @@ class GSM8K(DeepEvalBaseBenchmark):
         self,
         n_shots: int = 3,
         enable_cot: bool = True,
+        enable_analogy: bool = False,
         n_problems: int = 1319,
         verbose_mode: bool = False,
         confinement_instructions: Optional[str] = None,
@@ -29,6 +30,7 @@ class GSM8K(DeepEvalBaseBenchmark):
         self.shots_dataset: List[Dict] = None
         self.n_shots: int = n_shots
         self.enable_cot: bool = enable_cot
+        self.enable_analogy: bool = enable_analogy
         self.n_problems: int = n_problems
         self.predictions: Optional[pd.DataFrame] = None
         self.overall_score: Optional[float] = None
@@ -122,6 +124,7 @@ class GSM8K(DeepEvalBaseBenchmark):
             input=golden.input,
             n_shots=self.n_shots,
             enable_cot=self.enable_cot,
+            enable_analogy=self.enable_analogy,
         )
 
         # Enforced model generation
@@ -158,6 +161,7 @@ class GSM8K(DeepEvalBaseBenchmark):
                 input=golden.input,
                 n_shots=self.n_shots,
                 enable_cot=self.enable_cot,
+                enable_analogy=self.enable_analogy,
             )
             prompts.append(prompt)
 
