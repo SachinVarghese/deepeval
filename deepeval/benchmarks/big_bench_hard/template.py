@@ -28,6 +28,8 @@ class BigBenchHardTemplate:
             prompt += "\n\n".join(prompt_content[: n_shots + 1])
             prompt += "\n\nQ: " + input + "\n"
             prompt += bbh_confinement_statements_dict[task]
+            if enable_cot:
+                prompt += "\nLet's think step-by-step to arrive at an answer. Make sure to output the answer at the end."
             prompt += "\nA: "
         else:
             prompt += "**Problem**: " + input + "\n"
