@@ -27,12 +27,12 @@ class GSM8KTemplate:
 
         if enable_cot:
             prompt += "Let's think step-by-step to arrive at an answer. Make sure to output the numerical answer at the end."
-            prompt += "**Answer**: \n\n"
-        if enable_analogy:
-            prompt += f"Recall {n_shots} relevant and distinct problems. For each problem, write the problem and the answer. Finally, answer the initial problem without any explanation. Make sure to output only the numerical answer at the end."
+            prompt += "\n**Answer**: "
+        elif enable_analogy:
+            prompt += f"Recall {n_shots} relevant and distinct problems. For each problem, write the problem and the answer. Finally, answer the initial problem without any explanation. Make sure to output only the numerical answer at the end.\n"
         else:
             prompt += "No explanation needed. Make sure to output only the numerical answer."
-            prompt += "**Answer**: \n\n"
+            prompt += "\n**Answer**: "
 
         return prompt
 
