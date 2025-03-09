@@ -21,17 +21,17 @@ class BigBenchHardTemplate:
         package_path = f"deepeval.benchmarks.big_bench_hard.{folder}"
 
         # get prompt from text file based on n_shots and folder path
-        prompt=""
+        prompt += "Task description: "
+        prompt_content = BigBenchHardTemplate.read_file(package_path, filename)
+        prompt += "\n\n".join(prompt_content[: (n_shots + 1) if not enable_analogy else 1])
+
         if not enable_analogy:
-            prompt += "Task description: "
-            prompt_content = BigBenchHardTemplate.read_file(package_path, filename)
-            prompt += "\n\n".join(prompt_content[: n_shots + 1])
             prompt += "\n\nQ: " + input + "\nA: \n"
             if enable_cot:
                 prompt += "Let's think step-by-step."
         else:
             prompt += "\n\n**Problem**: " + input + "\n**Answer**: \n"
-            prompt += f"Let's recall {n_shots} relevant problems and answers. Finally, answer the initial problem without any explanations."
+            prompt += f"Let's recall {n_shots} relevant problems and answers. Finally, answer the initial problem without explanations."
 
         prompt += bbh_confinement_statements_dict[task]+" Make sure to output only the answer at the end.\n"
         return prompt
