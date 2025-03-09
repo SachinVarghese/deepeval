@@ -1,6 +1,6 @@
 from importlib import resources
 
-from deepeval.benchmarks.big_bench_hard.task import BigBenchHardTask
+from deepeval.benchmarks.big_bench_hard.task import BigBenchHardTask, bbh_confinement_statements_dict
 from deepeval.benchmarks.big_bench_hard.cot_prompts import *
 from deepeval.benchmarks.big_bench_hard.shot_prompts import *
 
@@ -26,10 +26,13 @@ class BigBenchHardTemplate:
             prompt += "Task description: "
             prompt_content = BigBenchHardTemplate.read_file(package_path, filename)
             prompt += "\n\n".join(prompt_content[: n_shots + 1])
-            prompt += "\n\nQ: " + input + "\nA: "
+            prompt += "\n\nQ: " + input + "\n"
+            prompt += bbh_confinement_statements_dict[task]
+            prompt += "\nA: "
         else:
             prompt += "**Problem**: " + input + "\n"
-            prompt += f"Recall {n_shots} relevant and distinct problems. For each problem, describe it and explain the answer. Answer the initial problem without explanation."
+            prompt += f"Recall {n_shots} relevant and distinct problems. For each problem, write the problem and the answer. Finally, answer the initial problem without any explanation."
+            prompt += bbh_confinement_statements_dict[task]
         return prompt
 
     def read_file(package_path, filename):
