@@ -7,7 +7,7 @@ class GSM8KTemplate:
     # Original method trained the generator on training set
     # Here we use the training set for COT few_shot prompting
 
-    # @staticmethod
+    @staticmethod
     def generate_output(
         input: str, train_set: object, n_shots: int, enable_cot: bool, enable_analogy: bool
     ):
@@ -23,17 +23,16 @@ class GSM8KTemplate:
                 )
 
         # problem of interest
-        prompt += "**Problem**: " + input + "\n"
+        prompt += "**Problem**: " + input
+        prompt += "\n**Answer**: \n"
 
         if enable_cot:
-            prompt += "Let's think step-by-step to arrive at an answer. Make sure to output the numerical answer at the end."
-            prompt += "\n**Answer**: "
+            prompt += "Let's think step-by-step to find the numerical answer. Make sure to output only the numerical answer at the end."
         elif enable_analogy:
-            prompt += f"Recall {n_shots} relevant and distinct problems. For each problem, write the problem and the answer. Finally, answer the initial problem without any explanation. Make sure to output only the numerical answer at the end.\n"
+            prompt += f"Let's recall {n_shots} relevant and distinct problems. For each problem, write the problem and the answer. Finally, answer the initial problem without any explanation at the end. Make sure to output only the numerical answer at the end."
         else:
-            prompt += "No explanation needed. Make sure to output only the numerical answer."
-            prompt += "\n**Answer**: "
-
+            prompt += "No explanation needed. Make sure to output only the numerical answer at the end."
+        prompt += "\n"
         return prompt
 
     @staticmethod
