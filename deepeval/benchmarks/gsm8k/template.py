@@ -32,7 +32,7 @@ class GSM8KTemplate:
             prompt += f"Let's recall {n_shots if n_shots>0 else 1} relevant problems and answers. Finally, answer the initial problem without explanations."
         else:
             prompt += "No explanation needed."
-        prompt += " Make sure to output only the numerical answer at the end.\n"
+        prompt += " Make sure to display only the numerical answer at the end.\n"
         return prompt
 
     @staticmethod

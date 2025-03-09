@@ -33,7 +33,7 @@ class BigBenchHardTemplate:
             prompt += "\n\n**Problem**: " + input + "\n**Answer**: \n"
             prompt += f"Let's recall {n_shots if n_shots>0 else 1} relevant problems and answers. Finally, answer the initial problem without explanations."
 
-        prompt += bbh_confinement_statements_dict[task]+" Make sure to output only the answer at the end.\n"
+        prompt += bbh_confinement_statements_dict[task]+" Make sure to display only the answer at the end.\n"
         return prompt
 
     def read_file(package_path, filename):
