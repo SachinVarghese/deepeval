@@ -10,7 +10,7 @@ class BigBenchHardTemplate:
     # COT prompts were taken directly from BBH Github Repo
     # Few-shot prompts were adpated from COT prompts by removing CoT Reasoning
 
-    # @staticmethod
+    @staticmethod
     def generate_output(
         input: str, task: BigBenchHardTask, n_shots: int, enable_cot: bool, enable_analogy: bool
     ):
@@ -26,15 +26,16 @@ class BigBenchHardTemplate:
             prompt += "Task description: "
             prompt_content = BigBenchHardTemplate.read_file(package_path, filename)
             prompt += "\n\n".join(prompt_content[: n_shots + 1])
-            prompt += "\n\nQ: " + input + "\n"
-            prompt += bbh_confinement_statements_dict[task]
+            prompt += "\n\nQ: " + input + "\nA:\n"
             if enable_cot:
-                prompt += "\nLet's think step-by-step to arrive at an answer. Make sure to output the answer at the end."
-            prompt += "\nA: "
-        else:
-            prompt += "**Problem**: " + input + "\n"
-            prompt += f"Recall {n_shots} relevant and distinct problems. For each problem, write the problem and the answer. Finally, answer the initial problem without any explanation."
+                prompt += "Let's think step-by-step to find the answer. Make sure to output only the answer at the end."
             prompt += bbh_confinement_statements_dict[task]
+        else:
+            prompt += "**Problem**: " + input + "\nA:\n"
+            prompt += f"Let's recall {n_shots} relevant and distinct problems. For each problem, write the problem and the answer. Finally, answer the initial problem without any explanation at the end. Make sure to output only the answer at the end."
+            prompt += bbh_confinement_statements_dict[task]
+
+        prompt += "\n"
         return prompt
 
     def read_file(package_path, filename):
