@@ -26,16 +26,14 @@ class BigBenchHardTemplate:
             prompt += "Task description: "
             prompt_content = BigBenchHardTemplate.read_file(package_path, filename)
             prompt += "\n\n".join(prompt_content[: n_shots + 1])
-            prompt += "\n\nQ: " + input + "\nA:\n"
+            prompt += "\n\nQ: " + input + "\nA: \n"
             if enable_cot:
-                prompt += "Let's think step-by-step to find the answer. Make sure to output only the answer at the end."
-            prompt += bbh_confinement_statements_dict[task]
+                prompt += "Let's think step-by-step."
         else:
-            prompt += "**Problem**: " + input + "\nA:\n"
-            prompt += f"Let's recall {n_shots} relevant and distinct problems. For each problem, write the problem and the answer. Finally, answer the initial problem without any explanation at the end. Make sure to output only the answer at the end."
-            prompt += bbh_confinement_statements_dict[task]
+            prompt += "\n\n**Problem**: " + input + "\n**Answer**: \n"
+            prompt += f"Let's recall {n_shots} relevant problems and answers. Finally, answer the initial problem without any explanations."
 
-        prompt += "\n"
+        prompt += bbh_confinement_statements_dict[task]+" Make sure to output only the answer at the end.\n"
         return prompt
 
     def read_file(package_path, filename):
