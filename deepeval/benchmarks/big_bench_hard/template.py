@@ -10,7 +10,7 @@ class BigBenchHardTemplate:
     # COT prompts were taken directly from BBH Github Repo
     # Few-shot prompts were adpated from COT prompts by removing CoT Reasoning
 
-    @staticmethod
+    # @staticmethod
     def generate_output(
         input: str, task: BigBenchHardTask, n_shots: int, enable_cot: bool, enable_analogy: bool
     ):
