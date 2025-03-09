@@ -7,7 +7,7 @@ class GSM8KTemplate:
     # Original method trained the generator on training set
     # Here we use the training set for COT few_shot prompting
 
-    @staticmethod
+    # @staticmethod
     def generate_output(
         input: str, train_set: object, n_shots: int, enable_cot: bool, enable_analogy: bool
     ):
