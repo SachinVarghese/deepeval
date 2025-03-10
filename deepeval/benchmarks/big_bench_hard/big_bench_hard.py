@@ -226,7 +226,8 @@ class BigBenchHard(DeepEvalBaseBenchmark):
         res = []
         for i in range(len(predictions)):
             prediction = predictions[i]
-            prediction = prediction.split()[-1]
+            words = prediction.split()
+            prediction = words[-1] if len(words)>0 else ' '
             prediction = prediction[:-1] if self.enable_cot else prediction
             golden = goldens[i]
 

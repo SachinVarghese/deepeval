@@ -32,7 +32,7 @@ class BigBenchHardTemplate:
         elif enable_analogy:
             prompt += f"Let's recall {n_shots if n_shots>0 else 1} relevant questions and answers. Finally, let's answer the initial question without explanations."
 
-        prompt += f" {bbh_confinement_statements_dict[task]} Make sure to display only the answer at the end."
+        prompt += f" {bbh_confinement_statements_dict[task]} Make sure to write the answer at the end."
         prompt += "\nA: "
         return prompt
 
