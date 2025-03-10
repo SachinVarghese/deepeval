@@ -25,15 +25,15 @@ class BigBenchHardTemplate:
         prompt_content = BigBenchHardTemplate.read_file(package_path, filename)
         prompt += "\n\n".join(prompt_content[: (n_shots + 1) if not enable_analogy else 1])
 
-        if not enable_analogy:
-            prompt += "\n\nQ: " + input + "\nA: "
-            if enable_cot:
-                prompt += "Let's think step-by-step."
-        else:
-            prompt += "\n\n**Problem**: " + input + "\n**Answer**: "
-            prompt += f"Let's recall {n_shots if n_shots>0 else 1} relevant problems and answers. Finally, let's answer the initial problem without explanations."
+        prompt += "\n\nQ: " + input + "\n"
 
-        prompt += bbh_confinement_statements_dict[task]+" Make sure to display only the answer at the end.\n"
+        if enable_cot:
+            prompt += "Let's think step-by-step."
+        elif enable_analogy:
+            prompt += f"Let's recall {n_shots if n_shots>0 else 1} relevant questions and answers. Finally, let's answer the initial question without explanations."
+
+        prompt += f" {bbh_confinement_statements_dict[task]} Make sure to display only the answer at the end."
+        prompt += "\nA: "
         return prompt
 
     def read_file(package_path, filename):
