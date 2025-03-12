@@ -30,8 +30,7 @@ class GSM8KTemplate:
         elif enable_analogy:
             prompt += f"Let's recall {n_shots if n_shots>0 else 1} relevant problems and answers. Finally, let's answer the initial problem without explanations."
         else:
-            prompt += "No explanation needed."
-        prompt += " At the end, make sure to write only the numerical form of the answer."
+            prompt += "Answer only the numerical form of the answer strictly without any explanations or details."
         prompt += "\n**Answer**: "
         return prompt
 
