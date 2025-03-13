@@ -23,15 +23,16 @@ class GSM8KTemplate:
                 )
 
         # problem of interest
-        prompt += "**Problem**: " + input + "\n"
+        prompt += "**Problem**: " + input
+        prompt += "\n**Answer**: "
 
         if enable_cot:
             prompt += "Let's think step-by-step."
         elif enable_analogy:
-            prompt += f"Let's recall {n_shots if n_shots>0 else 1} relevant problems and answers. Finally, let's answer the initial problem without explanations."
+            prompt += f"Let's recall {n_shots if n_shots>0 else 1} relevant example problems and answers. Finally, let's answer the initial problem."
         else:
             prompt += "Answer only the numerical form of the answer strictly without any explanations or details."
-        prompt += "\n**Answer**: "
+
         return prompt
 
     @staticmethod
