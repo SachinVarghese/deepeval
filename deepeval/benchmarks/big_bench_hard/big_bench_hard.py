@@ -169,16 +169,15 @@ class BigBenchHard(DeepEvalBaseBenchmark):
             enable_analogy=self.enable_analogy,
         )
         pydantic_model = bbh_models_dict[task.value]
-        # try:
-        #     res = model.generate(prompt=prompt, schema=pydantic_model)
-        #     prediction = str(res.answer)
-        # except TypeError:
-        #     prompt += self.confinement_instructions_dict[task]
-        #     prediction = model.generate(prompt)
+        try:
+            res = model.generate(prompt=prompt, schema=pydantic_model)
+            prediction = str(res.answer)
+        except TypeError:
+            prompt += self.confinement_instructions_dict[task]
+            prediction = model.generate(prompt)
+            prediction = str(prediction)
         # if isinstance(prediction, tuple):
         #     prediction = prediction[0]
-        prediction = model.generate(prompt)
-        prediction = str(prediction)
 
         # Define Metric
         score = self.scorer.exact_match_score(
@@ -204,21 +203,19 @@ class BigBenchHard(DeepEvalBaseBenchmark):
             prompts.append(prompt)
 
         # Enforced model generation
-        # try:
-        #     pydantic_model = bbh_models_dict[task.value]
-        #     responses: List = model.batch_generate(
-        #         prompts=prompts, schemas=[pydantic_model for i in prompts]
-        #     )
-        #     predictions = [res.answer for res in responses]
-        # except TypeError:
-        #     prompts = [
-        #         prompt + "Make sure to output only the numerical answer."
-        #         for prompt in prompts
-        #     ]
-        #     predictions = model.batch_generate(prompts)
-        #     predictions = [str(pred) for pred in predictions]
-        predictions = model.batch_generate(prompts)
-        predictions = [str(pred) for pred in predictions]
+        try:
+            pydantic_model = bbh_models_dict[task.value]
+            responses: List = model.batch_generate(
+                prompts=prompts, schema=pydantic_model
+            )
+            predictions = [str(res.answer) for res in responses]
+        except TypeError:
+            prompts = [
+                prompt + "Make sure to output only the numerical answer."
+                for prompt in prompts
+            ]
+            predictions = model.batch_generate(prompts)
+            predictions = [str(pred) for pred in predictions]
         if len(predictions) is not len(goldens):
             raise ValueError(
                 "Custom `batch_generate` method did not return the same number of generations as the number of prompts."
