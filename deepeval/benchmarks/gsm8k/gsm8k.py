@@ -133,13 +133,14 @@ class GSM8K(DeepEvalBaseBenchmark):
                 prompt=prompt, schema=NumberSchema
             )
             prediction = str(res.answer)
-        except TypeError:
+        except (AttributeError, TypeError):
             prompt += f"\n\n{self.confinement_instructions}"
             prediction = model.generate(prompt)
-            prediction = str(prediction)
+
         # For native models, shouldn't happen but just in case
-        # if isinstance(prediction, tuple):
-        #     prediction = prediction[0]
+        if isinstance(prediction, tuple):
+            prediction = prediction[0]
+        prediction = str(prediction)
 
         score = self.scorer.exact_match_score(
             golden.expected_output, prediction
@@ -170,7 +171,7 @@ class GSM8K(DeepEvalBaseBenchmark):
                 prompts=prompts, schema=NumberSchema
             )
             predictions = [str(res.answer) for res in responses]
-        except TypeError:
+        except (AttributeError, TypeError):
             prompts = [
                 prompt + f"\n\n{self.confinement_instructions}"
                 for prompt in prompts
@@ -186,8 +187,8 @@ class GSM8K(DeepEvalBaseBenchmark):
         for i in range(len(predictions)):
             prediction = predictions[i]
             # For native models, shouldn't happen but just in case
-            # if isinstance(prediction, tuple):
-            #     prediction = prediction[0]
+            if isinstance(prediction, tuple):
+                prediction = prediction[0]
             prediction = str(prediction)
             golden = goldens[i]
 
