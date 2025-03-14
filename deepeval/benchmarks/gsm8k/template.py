@@ -27,7 +27,7 @@ class GSM8KTemplate:
         prompt += "\n**Answer**: "
 
         if enable_cot:
-            prompt += "Let's think step-by-step."
+            prompt += "Let's think step-by-step to arrive at an answer."
         elif enable_analogy:
             prompt += f"Let's recall {n_shots if n_shots>0 else 1} relevant example problems and answers. Finally, let's answer the initial problem."
         else:
