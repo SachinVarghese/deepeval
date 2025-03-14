@@ -128,19 +128,18 @@ class GSM8K(DeepEvalBaseBenchmark):
         )
 
         # Enforced model generation
-        # try:
-        #     res: NumberSchema = model.generate(
-        #         prompt=prompt, schema=NumberSchema
-        #     )
-        #     prediction = str(res.answer)
-        # except TypeError:
-        #     prompt += f"\n\n{self.confinement_instructions}"
-        #     prediction = model.generate(prompt)
+        try:
+            res: NumberSchema = model.generate(
+                prompt=prompt, schema=NumberSchema
+            )
+            prediction = str(res.answer)
+        except TypeError:
+            prompt += f"\n\n{self.confinement_instructions}"
+            prediction = model.generate(prompt)
+            prediction = str(prediction)
         # For native models, shouldn't happen but just in case
         # if isinstance(prediction, tuple):
         #     prediction = prediction[0]
-        prediction = model.generate(prompt)
-        prediction = str(prediction)
 
         score = self.scorer.exact_match_score(
             golden.expected_output, prediction
@@ -166,19 +165,18 @@ class GSM8K(DeepEvalBaseBenchmark):
             prompts.append(prompt)
 
         # Enforced model generation
-        # try:
-        #     responses: List = model.batch_generate(
-        #         prompts=prompts, schemas=[NumberSchema for i in prompts]
-        #     )
-        #     predictions = [res.answer for res in responses]
-        # except TypeError:
-        #     prompts = [
-        #         prompt + f"\n\n{self.confinement_instructions}"
-        #         for prompt in prompts
-        #     ]
-        #     predictions = model.batch_generate(prompts)
-        #     predictions = [str(pred) for pred in predictions]
-        predictions = model.batch_generate(prompts)
+        try:
+            responses: List = model.batch_generate(
+                prompts=prompts, schema=NumberSchema
+            )
+            predictions = [str(res.answer) for res in responses]
+        except TypeError:
+            prompts = [
+                prompt + f"\n\n{self.confinement_instructions}"
+                for prompt in prompts
+            ]
+            predictions = model.batch_generate(prompts)
+            predictions = [str(pred) for pred in predictions]
         if len(predictions) is not len(goldens):
             raise ValueError(
                 "Custom `batch_generate` method did not return the same number of generations as the number of prompts."
