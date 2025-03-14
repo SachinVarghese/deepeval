@@ -28,7 +28,7 @@ class BigBenchHardTemplate:
         prompt += "\n\nQ: " + input + " "+ bbh_confinement_statements_dict[task]
         prompt += "\nA: "
         if enable_cot:
-            prompt += "Let's think step-by-step."
+            prompt += "Let's think step-by-step to arrive at an answer."
         elif enable_analogy:
             prompt += f"Let's recall {n_shots if n_shots>0 else 1} relevant example questions and answers. Finally, let's answer the initial question.\n"
 
