@@ -2,6 +2,7 @@ from typing import List, Optional, Dict
 import pandas as pd
 from tqdm import tqdm
 
+import time
 from deepeval.dataset import Golden
 from deepeval.benchmarks.base_benchmark import DeepEvalBaseBenchmark
 from deepeval.models import DeepEvalBaseLLM
@@ -58,6 +59,7 @@ class BigBenchHard(DeepEvalBaseBenchmark):
             use_batch = should_use_batch(model, batch_size)
 
             for task in self.tasks:
+                start = time.time()
                 goldens = self.load_benchmark_dataset(task)
                 if (
                     self.n_problems_per_task is not None
@@ -130,7 +132,8 @@ class BigBenchHard(DeepEvalBaseBenchmark):
                 print(
                     f"Big Bench Hard Task Accuracy (task={task.value}): {task_accuracy}"
                 )
-                scores_row.append((task.value, task_accuracy))
+                end = time.time()
+                scores_row.append((task.value, task_accuracy, (end - start)))
 
             # Calculate overall accuracy
             overall_accuracy = (
@@ -151,7 +154,7 @@ class BigBenchHard(DeepEvalBaseBenchmark):
                 ],
             )
             self.task_scores = pd.DataFrame(
-                scores_row, columns=["Task", "Score"]
+                scores_row, columns=["Task", "Score", "Time Taken"]
             )
             self.overall_score = overall_accuracy
 
